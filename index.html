@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selamat Ulang Tahun!</title>
+
+  <style>
+    :root {
+      --pink: #ff75a8;
+      --yellow: #ffd166;
+      --purple: #9b5de5;
+      --blue: #00bbf9;
+      --dark: #54245f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, #fff8bd 0 8%, transparent 9%),
+        radial-gradient(circle at 80% 20%, #ffd6e7 0 10%, transparent 11%),
+        linear-gradient(135deg, #ffc8dd, #cdb4db 50%, #a2d2ff);
+      color: var(--dark);
+    }
+
+    .game {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      isolation: isolate;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 180px;
+      height: 55px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.7);
+      filter: blur(1px);
+      z-index: -1;
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      border-radius: 50%;
+      background: inherit;
+    }
+
+    .cloud::before {
+      left: 30px;
+      width: 75px;
+      height: 75px;
+    }
+
+    .cloud::after {
+      right: 25px;
+      width: 65px;
+      height: 65px;
+    }
+
+    .cloud.one {
+      top: 10%;
+      left: 4%;
+      transform: scale(0.8);
+    }
+
+    .cloud.two {
+      top: 18%;
+      right: 3%;
+      transform: scale(0.65);
+    }
+
+    .card {
+      position: relative;
+      width: min(620px, 100%);
+      padding: 42px 25px 35px;
+      text-align: center;
+      border: 5px solid rgba(255, 255, 255, 0.8);
+      border-radius: 35px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 20px 60px rgba(91, 47, 103, 0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    .card::before {
+      content: "🎀";
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 65px;
+      animation: wiggle 2s infinite ease-in-out;
+    }
+
+    h1 {
+      margin: 0;
+      color: #ed4f91;
+      font-size: clamp(2.2rem, 8vw, 4.8rem);
+      line-height: 1;
+      text-shadow: 3px 3px 0 #fff, 5px 5px 0 rgba(237, 79, 145, 0.2);
+    }
+
+    .subtitle {
+      margin: 18px 0 25px;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-weight: bold;
+    }
+
+    .cake {
+      position: relative;
+      width: 230px;
+      height: 205px;
+      margin: 10px auto 12px;
+      display: none;
+      animation: pop 0.8s cubic-bezier(.17, .89, .32, 1.49) forwards;
+    }
+
+    .cake.visible {
+      display: block;
+    }
+
+    .plate {
+      position: absolute;
+      bottom: 3px;
+      left: 15px;
+      width: 200px;
+      height: 22px;
+      border-radius: 50%;
+      background: #7f55b5;
+      box-shadow: 0 7px 0 #654295;
+    }
+
+    .cake-base {
+      position: absolute;
+      bottom: 22px;
+      left: 35px;
+      width: 160px;
+      height: 80px;
+      border-radius: 12px 12px 24px 24px;
+      background: #ff8fab;
+      box-shadow: inset 0 -13px rgba(224, 68, 119, 0.25);
+    }
+
+    .cake-base::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 160px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff0f5;
+      border: 5px solid #ff8fab;
+    }
+
+    .cream {
+      position: absolute;
+      z-index: 2;
+      bottom: 87px;
+      left: 35px;
+      width: 160px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff0f5;
+    }
+
+    .cream::after {
+      content: "🍓  🍓  🍓";
+      position: absolute;
+      left: 22px;
+      top: -11px;
+      font-size: 20px;
+    }
+
+    .candle {
+      position: absolute;
+      z-index: 4;
+      top: 18px;
+      width: 16px;
+      height: 55px;
+      border-radius: 5px;
+      background: repeating-linear-gradient(
+        135deg,
+        #00bbf9 0 7px,
+        #fff 7px 14px
+      );
+    }
+
+    .candle.left {
+      left: 82px;
+    }
+
+    .candle.right {
+      right: 82px;
+      background: repeating-linear-gradient(
+        135deg,
+        #ffd166 0 7px,
+        #fff 7px 14px
+      );
+    }
+
+    .flame {
+      position: absolute;
+      top: -24px;
+      left: 2px;
+      width: 13px;
+      height: 22px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      background: #ff9f1c;
+      box-shadow: 0 0 18px #ffea00;
+      animation: flame 0.5s infinite alternate;
+    }
+
+    .message {
+      display: none;
+      margin: 12px auto 22px;
+      max-width: 480px;
+      padding: 15px 20px;
+      border-radius: 20px;
+      color: #713f82;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      font-weight: bold;
+      background: #fff8bd;
+      box-shadow: 0 5px 0 #f4d35e;
+      animation: fadeUp 1s 0.5s both;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    button {
+      border: 0;
+      padding: 15px 32px;
+      border-radius: 999px;
+      color: white;
+      background: linear-gradient(135deg, #ff4f9a, #9b5de5);
+      box-shadow: 0 7px 0 #743e9d, 0 12px 25px rgba(155, 93, 229, 0.35);
+      font: inherit;
+      font-size: 1.15rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.04);
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #743e9d;
+    }
+
+    .hint {
+      margin: 18px 0 0;
+      opacity: 0.75;
+      font-size: 0.85rem;
+    }
+
+    .balloon {
+      position: fixed;
+      bottom: -160px;
+      width: 58px;
+      height: 75px;
+      border-radius: 50% 50% 45% 45%;
+      z-index: -1;
+      animation: fly 7s linear forwards;
+    }
+
+    .balloon::before {
+      content: "";
+      position: absolute;
+      left: 24px;
+      bottom: -9px;
+      width: 10px;
+      height: 12px;
+      background: inherit;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      left: 29px;
+      top: 75px;
+      width: 2px;
+      height: 115px;
+      background: rgba(84, 36, 95, 0.45);
+    }
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      width: 9px;
+      height: 17px;
+      z-index: 20;
+      animation: fall 3.5s linear forwards;
+    }
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      animation: sparkle 1s forwards;
+      z-index: 30;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0) rotate(-15deg); }
+      to { transform: scale(1) rotate(0); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: translateX(-50%) rotate(-5deg); }
+      50% { transform: translateX(-50%) rotate(5deg); }
+    }
+
+    @keyframes flame {
+      to { transform: rotate(-45deg) scale(1.18); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fly {
+      to {
+        bottom: 115%;
+        transform: translateX(100px) rotate(20deg);
+      }
+    }
+
+    @keyframes fall {
+      to {
+        top: 110%;
+        transform: rotate(720deg);
+      }
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(0); }
+      70% { opacity: 1; transform: scale(1.5); }
+      100% { opacity: 0; transform: scale(0); }
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        padding-top: 35px;
+      }
+
+      .cake {
+        transform: scale(0.85);
+        margin-top: -4px;
+        margin-bottom: -10px;
+      }
+
+      .cake.visible {
+        animation: popMobile 0.8s cubic-bezier(.17, .89, .32, 1.49) forwards;
+      }
+
+      @keyframes popMobile {
+        from { transform: scale(0); }
+        to { transform: scale(0.85); }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="game">
+    <div class="cloud one"></div>
+    <div class="cloud two"></div>
+
+    <section class="card">
+      <h1 id="title">Pesta Ulang Tahun!</h1>
+      <p class="subtitle" id="subtitle">
+        Tekan tombol di bawah untuk memulai kejutan 🎁
+      </p>
+
+      <div class="cake" id="cake" aria-label="Kue ulang tahun">
+        <div class="candle left"><span class="flame"></span></div>
+        <div class="candle right"><span class="flame"></span></div>
+        <div class="cream"></div>
+        <div class="cake-base"></div>
+        <div class="plate"></div>
+      </div>
+
+      <p class="message" id="message">
+        Semoga panjang umur, sehat selalu, dan semua impianmu tercapai! 💖
+      </p>
+
+      <button id="startButton">🎉 Mulai Kejutan 🎉</button>
+      <p class="hint">Klik di mana saja untuk membuat bintang berkilau ✨</p>
+    </section>
+  </main>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+    const title = document.getElementById("title");
+    const subtitle = document.getElementById("subtitle");
+    const cake = document.getElementById("cake");
+    const message = document.getElementById("message");
+
+    let audioContext;
+    let musicTimer;
+
+    const colors = [
+      "#ff4f9a",
+      "#ffd166",
+      "#00bbf9",
+      "#9b5de5",
+      "#06d6a0",
+      "#ff8fab"
+    ];
+
+    function randomColor() {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createBalloon(index) {
+      const balloon = document.createElement("div");
+      balloon.className = "balloon";
+      balloon.style.left = `${Math.random() * 95}%`;
+      balloon.style.background = randomColor();
+      balloon.style.animationDelay = `${index * 0.18}s`;
+      balloon.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+      document.body.appendChild(balloon);
+
+      setTimeout(() => balloon.remove(), 8500);
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti";
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.background = randomColor();
+        piece.style.animationDelay = `${Math.random() * 1.7}s`;
+        piece.style.animationDuration = `${2.5 + Math.random() * 2.5}s`;
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 6500);
+      }
+    }
+
+    // Musik sederhana menggunakan Web Audio API, tanpa file eksternal.
+    function startMusic() {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      const notes = [
+        523.25, 659.25, 783.99, 1046.50,
+        783.99, 659.25, 587.33, 698.46
+      ];
+
+      let noteIndex = 0;
+
+      function playNote() {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "triangle";
+        oscillator.frequency.value = notes[noteIndex % notes.length];
+
+        gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.08,
+          audioContext.currentTime + 0.02
+        );
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          audioContext.currentTime + 0.28
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.3);
+        noteIndex++;
+      }
+
+      playNote();
+      musicTimer = setInterval(playNote, 360);
+    }
+
+    function stopMusic() {
+      if (musicTimer) {
+        clearInterval(musicTimer);
+      }
+
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+    }
+
+    function createSparkle(event) {
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.textContent = "✨";
+      sparkle.style.left = `${event.clientX - 12}px`;
+      sparkle.style.top = `${event.clientY - 12}px`;
+      sparkle.style.fontSize = `${18 + Math.random() * 20}px`;
+      document.body.appendChild(sparkle);
+
+      setTimeout(() => sparkle.remove(), 1000);
+    }
+
+    startButton.addEventListener("click", () => {
+      title.textContent = "Selamat Ulang Tahun!";
+      subtitle.textContent = "Hari ini adalah hari yang sangat spesial untukmu! 🥳";
+      cake.classList.add("visible");
+      message.classList.add("visible");
+      startButton.textContent = "🔁 Rayakan Lagi";
+
+      createConfetti();
+
+      for (let i = 0; i < 18; i++) {
+        createBalloon(i);
+      }
+
+      stopMusic();
+      startMusic();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (event.target !== startButton) {
+        createSparkle(event);
+      }
+    });
+  </script>
+</body>
+</html>
